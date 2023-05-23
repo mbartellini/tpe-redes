@@ -10,6 +10,7 @@ packages = [{include = "tpe_redes"}]
 python = "^3.10"
 fastapi = "^0.95.2"
 uvicorn = "^0.22.0"
+python-dotenv = "^1.0.0"
 
 
 [build-system]
