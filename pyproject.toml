@@ -4,7 +4,6 @@ version = "0.1.0"
 description = ""
 authors = ["Juan Negro <jnegro@itba.edu.ar>", "Mateo Bartellini Huapalla <mbartellini@itba.edu.ar>", "Juan Martín Barmasch <jbarmasch@itba.edu.ar>"]
 readme = "README.md"
-packages = [{include = "tpe_redes"}]
 
 [tool.poetry.dependencies]
 python = "^3.10"
