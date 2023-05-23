@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: tpe-redes-fastapi-deploy
+  labels:
+    app: tpe-redes-fastapi
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: tpe-redes-fastapi
+  template:
+    metadata:
+      labels:
+        app: tpe-redes-fastapi
+    spec:
+      containers:
+      - name: tpe-redes-fastapi
+        image: tpe-redes-fastapi:latest
+        ports:
+        - containerPort: 8000
