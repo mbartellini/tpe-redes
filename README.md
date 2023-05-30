@@ -8,4 +8,18 @@
 
 ## Requirements
 
--
+- `docker`
+- `minikube`
+
+## Installation
+
+All of these instructions are to be followed inside this repository's root directory.
+
+- Run `docker build -t tpe-redes-fastapi .`.
+  - This will build an image named "tpe-redes-fastapi" based on the `Dockerfile` in this repository.
+  - The image built runs a FastAPI
+- Run `minikube start`
+  - This will try to start the `minikube` cluster using `kubectl`.
+  - If it does not find `kubectl` on your computer, it will download it on its own.
+- Run `minikube image load tpe-redes-fastapi`
+  - This will load the previously built image onto the cluster
