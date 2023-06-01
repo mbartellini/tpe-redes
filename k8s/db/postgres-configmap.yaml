@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-db-configmap
+  labels:
+    app: postgres-db
+data:
+  POSTGRES_DB: redes-db
+  POSTGRES_USER: redes-user
+  POSTGRES_PASSWORD: redes-password
