@@ -23,3 +23,6 @@ All of these instructions are to be followed inside this repository's root direc
   - If it does not find `kubectl` on your computer, it will download it on its own.
 - Run `minikube image load tpe-redes-fastapi`
   - This will load the previously built image onto the cluster
+  - Another option would be to run `minikube image build -t tpe-redes-fastapi .`, which will build the image directly inside `minikube`
+    to avoid building it with `docker` and loading it afterwards.
+- Run `kubectl apply -f k8s/deploy.yaml`
