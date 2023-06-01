@@ -10,7 +10,7 @@ app = FastAPI()
 
 @app.get("/")
 async def root():
-    return {"message": getenv("POD_MSG", "Hello World!")}
+    return {"message": "Hello! I am: " + getenv("HOSTNAME", "I don't know who I am!")}
 
 
 if __name__ == "__main__":
