@@ -1,21 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata: 
-  name: tpe-redes-fastapi-deploy
+  name: redes-fastapi
   labels:
-    app: tpe-redes-fastapi
+    app: redes-fastapi
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: tpe-redes-fastapi
+      app: redes-fastapi
   template:
     metadata:
       labels:
-        app: tpe-redes-fastapi
+        app: redes-fastapi
     spec:
       containers:
-      - name: tpe-redes-fastapi
+      - name: redes-fastapi
         image: tpe-redes-fastapi:latest
+        imagePullPolicy: Never
         ports:
         - containerPort: 8000
