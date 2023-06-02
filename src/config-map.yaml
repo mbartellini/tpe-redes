@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-db-configmap
+  labels:
+    app: postgres-db
+data:
+  POSTGRES_USER: redes
+  POSTGRES_DB: redes
+  POSTGRES_PASSWORD: redes
+  POSTGRES_HOST: dockerhost
+  POSTGRES_PORT: "5432"
