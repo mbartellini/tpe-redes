@@ -15,11 +15,9 @@ PG_DB = getenv("POSTGRES_DB", "db")
 
 SQLALCHEMY_DATABASE_URL = f"postgresql://{PG_USER}:{PG_PASSWORD}@{PG_HOST}/{PG_DB}"
 
-engine = create_engine(
-    SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False}
-)
+engine = create_engine(SQLALCHEMY_DATABASE_URL)
 
-SessionLocal = sessionmaker(autocommit=True, autoflush=True, bind=engine)
+SessionLocal = sessionmaker(bind=engine)
 Base = declarative_base()
 
 
