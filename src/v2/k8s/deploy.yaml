@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: redes-api-v2
+  labels:
+    app: redes-api-v2
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: redes-api-v2
+  template:
+    metadata:
+      labels:
+        app: redes-api-v2
+    spec:
+      containers:
+      - name: redes-api-v2
+        image: redes-api-v2:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8000

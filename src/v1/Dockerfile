@@ -14,6 +14,6 @@ COPY poetry.lock pyproject.toml /code/
 
 RUN poetry install --no-interaction --no-ansi
 
-COPY ./src /code/app
+COPY ./app /code/app
 
 CMD ["poetry", "run", "uvicorn", "app.main:app", "--port", "8000", "--host", "0.0.0.0", "--reload"]

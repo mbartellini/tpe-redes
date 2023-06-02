@@ -1,7 +1,7 @@
 version: "3.9"
 
 services:
-  fastapi:
+  redes-api-v2:
     build: .
     ports:
       - "8000:8000"
