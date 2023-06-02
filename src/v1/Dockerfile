@@ -5,6 +5,7 @@ USER root
 ENV POETRY_VERSION="1.3.2"
 
 RUN pip install "poetry==$POETRY_VERSION"
+RUN pip install psycopg2-binary
 
 WORKDIR /code
 
