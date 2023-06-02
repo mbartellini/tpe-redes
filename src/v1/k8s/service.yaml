@@ -1,13 +1,13 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: redes-api-v1-service
+  name: v1-redes-api-service
   labels: 
-    app: redes-api-v1
+    app: v1-redes-api
 spec:
   type: ClusterIP
   selector:
-    app: redes-api-v1
+    app: v1-redes-api
   ports:
   - port: 8000
     targetPort: 8000

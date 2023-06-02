@@ -1,7 +1,7 @@
 version: "3.9"
 
 services:
-  redes-api-v1:
+  redes-api:
     build: .
     ports:
       - "8000:8000"
