@@ -9,3 +9,5 @@ kind load docker-image v1-redes-api v2-redes-api --name redes-cluster
 kubectl apply -f src/
 kubectl apply -f src/v1/k8s/
 kubectl apply -f src/v2/k8s/
+
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.8.0/deploy/static/provider/cloud/deploy.yaml
