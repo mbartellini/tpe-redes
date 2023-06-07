@@ -3,20 +3,21 @@ kind: Ingress
 metadata:
   name: reverse-proxy
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
 spec:
   ingressClassName: nginx
   rules:
   - http:
       paths:
-      - path: /v1
+      - path: /v1(/|$)(.*)
         pathType: Prefix
         backend:
           service:
             name: v1-redes-api-service
             port:
               number: 8000
-      - path: /v2
+      - path: /v2(/|$)(.*)
         pathType: Prefix
         backend:
           service:
