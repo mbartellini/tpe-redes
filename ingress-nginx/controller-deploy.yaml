@@ -404,7 +404,7 @@ metadata:
   annotations:
     traffic.sidecar.istio.io/includeInboundPorts: ""
     traffic.sidecar.istio.io/excludeInboundPorts: "80,443"
-    traffic.sidecar.istio.io/excludeOutboundIPRanges: "substitute_for_correct_subnet_range"
+    traffic.sidecar.istio.io/excludeOutboundIPRanges: ""
     sidecar.istio.io/inject: 'true'
 spec:
   minReadySeconds: 0
