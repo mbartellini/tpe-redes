@@ -8,8 +8,8 @@ kubectl apply -f namespaces/
 kubectl label namespace default istio-injection=enabled
 kubectl label namespace ingress-nginx istio-injection=enabled
 
-cd ./src/v1 && docker-compose build
-cd ../v2 && docker-compose build
+cd ./src/v1 && docker compose build
+cd ../v2 && docker compose build
 
 cd ../../
 kind load docker-image v1-redes-api v2-redes-api --name redes-cluster
