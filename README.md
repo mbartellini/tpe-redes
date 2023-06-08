@@ -199,7 +199,7 @@ kind load docker-image v1-redes-api v2-redes-api --name redes-cluster
 ```
 Con el último comando, cargamos las imágenes de nuestra API al cluster de kubernetes, ya que basamos nuestros containers en sus imágenes y no las tenemos cargadas en un _registry_.
 
-6. Configuración de los pods y 
+6. Configuración de los _pods_ de nuestra API
 ```shell
 kubectl apply -f src/
 kubectl apply -f src/v1/k8s/
@@ -214,8 +214,17 @@ kubectl wait --namespace ingress-nginx --for=condition=ready pod --selector=app.
 ```
 Con la primera línea, estamos instalando nginx como _ingress_ en el _cluster_ de kubernetes. Con la segunda, estamos esperando a que se terminen de crear los _pods_. Así, cuando se encuentran _running_, podemos configurar la redirección que hacemos desde la entrada del _cluster_ a nuestras distintas versiones de la API.
 
-7. Redirección de puertos
+8. Redirección de puertos
 ```shell
 kubectl port-forward --namespace=ingress-nginx service/ingress-nginx-controller 8084:80
 ```
-Con el anterior comando, redirigimos nuestro tráfico local en el puerto de la izquierda al puerto 80 interno del _cluster_.
+Con el anterior comando, redirigimos nuestro tráfico local en el puerto de la izquierda al puerto 80 interno del _cluster_. Si queremos configurar para que el puerto local sea el 80, deberemos usar `sudo`.
+
+
+## Uso del proyecto
+Después de haber seguido los pasos de "Instalación del proyecto", podemos hacer los siguientes pedidos:
+
+
+```shell
+```
+
