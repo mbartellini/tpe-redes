@@ -2,7 +2,7 @@ from os import getenv
 
 import uvicorn
 from dotenv import load_dotenv
-from fastapi import Depends, FastAPI, HTTPException
+from fastapi import Depends, FastAPI, HTTPException, Response
 from sqlalchemy.orm import Session
 
 from .db import get_db
@@ -12,24 +12,31 @@ load_dotenv()
 app = FastAPI()
 
 
+podname = getenv("HOSTNAME", "I don't know who I am!")
+
+
 @app.get("/")
-async def root():
-    return {"message": "Hello! I am: " + getenv("HOSTNAME", "I don't know who I am!")}
+async def root(response: Response):
+    response.headers["X-Pod-Name"] = podname
+    return {"message": "Hello! I am: " + podname}
 
 
 @app.get("/health")
-async def health():
+async def health(response: Response):
+    response.headers["X-Pod-Name"] = podname
     return {"status": "ok"}
 
 
 # An endpoint to get a general list of restaurants
 @app.get("/restaurant")
-async def restaurant(db: Session = Depends(get_db)):
+async def restaurant(response: Response, db: Session = Depends(get_db)):
+    response.headers["X-Pod-Name"] = podname
     return db.query(Restaurant).limit(10).all()
 
 
 @app.get("/restaurant/{id}")
-async def restaurant_by_id(id: int, db: Session = Depends(get_db)):
+async def restaurant_by_id(response: Response, id: int, db: Session = Depends(get_db)):
+    response.headers["X-Pod-Name"] = podname
     restaurant = db.query(Restaurant).get(id)
     if restaurant is None:
         raise HTTPException(status_code=404, detail="Restaurant not found")

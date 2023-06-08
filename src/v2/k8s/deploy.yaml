@@ -4,8 +4,13 @@ metadata:
   name: v2-redes-api
   labels:
     app: v2-redes-api
+  annotations:
+    traffic.sidecar.istio.io/includeInboundPorts: ""
+    traffic.sidecar.istio.io/excludeInboundPorts: "80,443"
+    traffic.sidecar.istio.io/excludeOutboundIPRanges: ""
+    sidecar.istio.io/inject: 'true'
 spec:
-  replicas: 3
+  replicas: 4
   selector:
     matchLabels:
       app: v2-redes-api
