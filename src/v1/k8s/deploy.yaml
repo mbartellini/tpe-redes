@@ -10,7 +10,7 @@ metadata:
     traffic.sidecar.istio.io/excludeOutboundIPRanges: ""
     sidecar.istio.io/inject: 'true'
 spec:
-  replicas: 3
+  replicas: 4
   selector:
     matchLabels:
       app: v1-redes-api
