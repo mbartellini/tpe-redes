@@ -86,6 +86,7 @@ Si no:
   $ chmod +x ./kind
   $ sudo mv ./kind /usr/local/bin/kind
 ```
+Esto también instala kubectl.
 
 ### Instalación de Istio
 1. Descargamos el archivo _release_ de Istio (versión 1.18.0):
