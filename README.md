@@ -1,6 +1,6 @@
 # tpe-redes
 
-El proyecto se probó para computadoras con Linux x86_64.
+El proyecto se probó para computadoras con Linux x86_64 (expecíficamente Ubuntu 22.04.2 LTS).
 
 ## Authors
 
@@ -116,7 +116,8 @@ Por ejemplo:
 ```
 
 ## Instalación del proyecto
-Para correr el proyecto, lo único que hace falta es levantar la base de datos y el _cluster_ de Kubernetes.
+Para correr el proyecto, lo único que hace falta es levantar la base de datos y el _cluster_ de Kubernetes. De aquí en adelante, cada sección empieza con su _working directory_ siendo el directorio raíz del proyecto.
+
 ### Base de datos
 1. Para levantar la base de datos, primero abriremos una terminal y entraremos al directorio `db`:
 ```shell
@@ -135,27 +136,62 @@ Deberíamos ver una salida similar a:
 postgres  | 2023-06-08 00:51:27.848 UTC [1] LOG:  database system is ready to accept connections
 
 ```
-3. Si en la salida anterior encontramos lo siguiente:
+3. Si en la salida anterior encontramos lo siguiente ("could not bind IPv4 address"):
 ```shell
 postgres  | 2023-06-08 00:54:27.879 UTC [1] LOG:  could not bind IPv4 address "0.0.0.0": Address already in use
 postgres  | 2023-06-08 00:54:27.879 UTC [1] HINT:  Is another postmaster already running on port 5432? If not, wait a few seconds and retry.
 ```
-Significa que nuestro _container_ entró en conflicto con la versión local de docker. Por ahora detenemos nuestra instancia local corriendo:
+Significa que nuestro _container_ entró en conflicto con la versión local de postgresql. Por ahora detenemos nuestra instancia local corriendo:
 ```shell
   $ sudo systemctl stop postgresql
 ```
 Y volvemos a intentar el paso 2.
+
 4. Verificamos una última vez que el _container_ esté corriendo a través del comando `docker ps`:
 ```shell
+  $ docker ps
+...   IMAGE                  ...                  CREATED       STATUS         ...                       NAMES
+...   postgres:13.3          ...                  5 seconds...  Up 5 seconds   ...                       postgres
 ```
-se halle corriendo, debería verse una salida similar a:
+
+### Cluster de kubernetes
+Lo único que hace falta es correr lo siguiente:
 ```shell
+  $ chmod u+x setup-cluster.sh
+  $ ./setup-cluster.sh
 ```
 
+Pero ahora veremos qué hace cada uno de los comandos y posibles reparaciones de errores, lo cual es más notorio al correrlos por separado:
 
+#### Explicación del script de configuración
+1. Creación del cluster
 ```shell
+kind create cluster --config k8s/cluster-config.yaml
+```
+El comando anterior crea a través de `kind` el _cluster_ de kubernetes. Kind crea los nodos a partir de _containers_ de Docker, por lo que después de correr el comando anterior, si corremos `docker ps`, deberíamos ver 3 nuevos contenedores con nombres "redes-cluster-control-plane", "redes-cluser-worker" y "redes-cluster-worker2".
+
+2. Creación de imágenes de las APIs
+```shell
+  $ cd ./src/v1 && docker-compose build
+  $ cd ../v2 && docker-compose build
 ```
 
+```
+cd ../../
+kind load docker-image v1-redes-api v2-redes-api --name redes-cluster
+
+kubectl apply -f src/
+kubectl apply -f src/v1/k8s/
+kubectl apply -f src/v2/k8s/
+
+# kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.8.0/deploy/static/provider/cloud/deploy.yaml
+# kubectl apply -f ingress-nginx/ingress-nginx.yaml
+# kubectl port-forward --namespace=ingress-nginx service/ingress-nginx-controller 8084:80
+
+istioctl install -y
+kubectl apply -f istio/
+
+```
 
 All of these instructions are to be followed inside this repository's root directory.
 
