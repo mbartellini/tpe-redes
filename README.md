@@ -170,39 +170,52 @@ kind create cluster --config k8s/cluster-config.yaml
 ```
 El comando anterior crea a través de `kind` el _cluster_ de kubernetes. Kind crea los nodos a partir de _containers_ de Docker, por lo que después de correr el comando anterior, si corremos `docker ps`, deberíamos ver 3 nuevos contenedores con nombres "redes-cluster-control-plane", "redes-cluser-worker" y "redes-cluster-worker2".
 
-2. Creación de imágenes de las APIs
+2. Instalación de istio y _add-ons_ en el _cluster_
 ```shell
-  $ cd ./src/v1 && docker-compose build
-  $ cd ../v2 && docker-compose build
+istioctl install -y
+kubectl apply -f prometheus/
+kubectl apply -f kiali/
 ```
 
+3. Configuración de _namespaces_
+```shell
+kubectl apply -f namespaces/
+kubectl label namespace default istio-injection=enabled
+kubectl label namespace ingress-nginx istio-injection=enabled
 ```
+Creamos los _namespaces_ que vamos a usar y configuramos para que istio pueda manejar las comunicaciones.
+
+4. Creación de imágenes de las APIs
+```shell
+cd ./src/v1 && docker-compose build
+cd ../v2 && docker-compose build
+```
+Creamos las imágenes de las distintas versiones de nuestra API.
+
+5. Carga de imágenes al cluster
+```shell
 cd ../../
 kind load docker-image v1-redes-api v2-redes-api --name redes-cluster
+```
+Con el último comando, cargamos las imágenes de nuestra API al cluster de kubernetes, ya que basamos nuestros containers en sus imágenes y no las tenemos cargadas en un _registry_.
 
+6. Configuración de los pods y 
+```shell
 kubectl apply -f src/
 kubectl apply -f src/v1/k8s/
 kubectl apply -f src/v2/k8s/
-
-# kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.8.0/deploy/static/provider/cloud/deploy.yaml
-# kubectl apply -f ingress-nginx/ingress-nginx.yaml
-# kubectl port-forward --namespace=ingress-nginx service/ingress-nginx-controller 8084:80
-
-istioctl install -y
-kubectl apply -f istio/
-
 ```
+Con los anteriores comandos, vamos a aplicar los archivos de configuración de los _deployments_, _services_ y _endpoints_ a nuestro _cluster_ de kubernetes.
 
-All of these instructions are to be followed inside this repository's root directory.
+7. Instalación y configuración de nginx en el _cluster_
+```shell
+kubectl apply -f ingress-nginx/controller-deploy.yaml
+kubectl wait --namespace ingress-nginx --for=condition=ready pod --selector=app.kubernetes.io/component=controller --timeout=120s && kubectl apply -f ingress-nginx/ingress-nginx.yaml
+```
+Con la primera línea, estamos instalando nginx como _ingress_ en el _cluster_ de kubernetes. Con la segunda, estamos esperando a que se terminen de crear los _pods_. Así, cuando se encuentran _running_, podemos configurar la redirección que hacemos desde la entrada del _cluster_ a nuestras distintas versiones de la API.
 
-- Run `docker build -t tpe-redes-fastapi .`.
-  - This will build an image named "tpe-redes-fastapi" based on the `Dockerfile` in this repository.
-  - The image built runs a FastAPI
-- Run `minikube start`
-  - This will try to start the `minikube` cluster using `kubectl`.
-  - If it does not find `kubectl` on your computer, it will download it on its own.
-- Run `minikube image load tpe-redes-fastapi`
-  - This will load the previously built image onto the cluster
-  - Another option would be to run `minikube image build -t tpe-redes-fastapi .`, which will build the image directly inside `minikube`
-    to avoid building it with `docker` and loading it afterwards.
-- Run `kubectl apply -f k8s/deploy.yaml`
+7. Redirección de puertos
+```shell
+kubectl port-forward --namespace=ingress-nginx service/ingress-nginx-controller 8084:80
+```
+Con el anterior comando, redirigimos nuestro tráfico local en el puerto de la izquierda al puerto 80 interno del _cluster_.
