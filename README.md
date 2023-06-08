@@ -231,4 +231,4 @@ curl 127.0.0.1:8080/[version]/restaurant/[id]
 ```
 donde ```[version]``` puede ser ```v1``` o ```v2``` y ```[id]``` es un identificador de restaurante que, si se usa la base de datos provista en este proyecto, es un número que va entre 1 y 34.
 
-Alternativamente, se puede ingresar a los paths a los que se les hace ```curl```desde un web browser. 
+Alternativamente, se puede ingresar a los paths a los que se les hace ```curl``` desde un web browser. 
