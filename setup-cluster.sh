@@ -20,4 +20,4 @@ kubectl apply -f src/v2/k8s/
 
 kubectl apply -f ingress-nginx/controller-deploy.yaml
 kubectl wait --namespace ingress-nginx --for=condition=ready pod --selector=app.kubernetes.io/component=controller --timeout=120s && kubectl apply -f ingress-nginx/ingress-nginx.yaml
-kubectl port-forward --namespace=ingress-nginx service/ingress-nginx-controller 8084:80
+kubectl port-forward --namespace=ingress-nginx service/ingress-nginx-controller 8080:80
