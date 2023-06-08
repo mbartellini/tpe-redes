@@ -47,7 +47,7 @@ El proyecto se probó para computadoras con Linux x86_64 (expecíficamente Ubunt
   $ sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 ```
 
-5. Verificamos la correcta instalación de Docker Engine corriente la imagen `hello-world`:
+6. Verificamos la correcta instalación de Docker Engine corriente la imagen `hello-world`:
 ```shell
   $ sudo docker run hello-world
 ```
@@ -74,6 +74,25 @@ Share images, automate workflows, and more with a free Docker ID:
 For more examples and ideas, visit:
  https://docs.docker.com/get-started/
 ```
+Para poder correr docker sin ser usuario root, se deben realizar los siguientes pasos:
+
+1. Crear el grupo ```docker```.
+```shell
+   $ sudo groupadd docker
+```
+2. Agregar el usuario actual al grupo ```docker```.
+```shell
+ $ sudo usermod -aG docker $USER
+```
+3. Cerrar y volver a iniciar sesión para actualizar los cambios.
+   Si se está corriendo Linux en una máquina virtual, es posible que sea necesario reiniciar la máquina virtual.
+
+4. Verificar que se puede correr el comando ```docker``` sin ```sudo```.
+   ```bash
+   $ docker run hello-world
+   ```
+  Se debería ver una salida en la consola como la indicada anteriormente con ```sudo docker run hello-world```.
+
 
 ### Instalación de kind
 Si se cuenta con `Homebrew`:
@@ -232,4 +251,16 @@ curl 127.0.0.1:8080/[version]/restaurant/[id]
 ```
 donde ```[version]``` puede ser ```v1``` o ```v2``` y ```[id]``` es un identificador de restaurante que, si se usa la base de datos provista en este proyecto, es un número que va entre 1 y 34.
 
-Alternativamente, se puede ingresar a los paths a los que se les hace ```curl``` desde un web browser. 
+También, si se corre el siguiente comando:
+```shell
+curl 127.0.0.1:8080/[version]
+```
+donde ```[version]``` cumple los mismos requisitos que en los comandos anteriores, se debería obtener una salida que incluya la siguiente línea:
+
+```{"message":"Hello! I am: [version]-redes-api-[nombre_pod]"}```
+
+donde ```[version]``` es la misma versión que se aclaró en el ```curl``` y ```[nombre pod]``` permite identificar al pod en que se está corriendo la API.
+
+Alternativamente, se puede ingresar a los paths a los que se les hace ```curl``` desde un web browser.
+
+
