@@ -263,4 +263,5 @@ donde ```[version]``` es la misma versión que se aclaró en el ```curl``` y ```
 
 Alternativamente, se puede ingresar a los paths a los que se les hace ```curl``` desde un web browser.
 
-
+Finalmente, si se corre el comando ```istioctl dashboard kiali``` se debería abrir en un browser un dashboard como el siguiente:
+![descripcion](media/image.png)
